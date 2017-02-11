@@ -1,5 +1,4 @@
-# version code 3e169d60c2de+
-coursera = 1
+# version code 80e56511a793+
 # Please fill out this stencil and submit using the provided submission script.
 
 
@@ -19,11 +18,11 @@ def tuple_sum(A, B):
     Examples:
     >>> tuple_sum([(1,2), (10,20)],[(3,4), (30,40)])
     [(4, 6), (40, 60)]
+    >>> tuple_sum([(0,1),(-1,0),(2,2)], [(3,4),(5,6),(7,8)])
+    [(3, 5), (4, 6), (9, 10)]
     '''
-    s=[]
-    for i in range(len(A)):
-       s.append((A[i][0]+B[i][0],A[i][1]+B[i][1]))
-    return s
+    pass
+
 
 
 ## 2: (Problem 0.8.4) Inverse Dictionary
@@ -37,12 +36,8 @@ def inv_dict(d):
     Example:
     >>> inv_dict({'goodbye':  'au revoir', 'thank you': 'merci'}) == {'merci':'thank you', 'au revoir':'goodbye'}
     '''
-    dd={}
-    k=list(d.keys())
-    v=list(d.values())
-    for i in range(len(d)):
-       dd[v[i]]=k[i]
-    return dd
+    pass
+
 
 
 ## 3: (Problem 0.8.5) Nested Comprehension
@@ -57,23 +52,21 @@ def row(p, n):
     >>> row(10,4)
     [10, 11, 12, 13]
     '''
-    s=[]
-    for i in range(n):
-        s.append(p+i)
-    return s
-comprehension_with_row = [ row(i,20) for i in range(15) ]
+    pass
 
-comprehension_without_row = [ [i+j for j in range(20)] for i in range(15) ]
+comprehension_with_row = ...
+
+comprehension_without_row = ...
 
 
 
 ## 4: (Problem 0.8.10) Probability Exercise 1
-Pr_f_is_even = 0.7 
-Pr_f_is_odd  = 0.3
+Pr_f_is_even = ...
+Pr_f_is_odd  = ...
 
 
 
 ## 5: (Problem 0.8.11) Probability Exercise 2
-Pr_g_is_1    = 0.4
-Pr_g_is_0or2 = 0.6
+Pr_g_is_1    = ...
+Pr_g_is_0or2 = ...
 

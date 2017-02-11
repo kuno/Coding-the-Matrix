@@ -1,25 +1,22 @@
-from random import randint # version code d345910f07ae
-coursera = 1
+# version code 80e56511a793+
 # Please fill out this stencil and submit using the provided submission script.
 
 
 
 
 
-## 1: (Task 1) Movie Review
+## 1: (Task 0.6.2) Movie Review
 ## Task 1
 def movie_review(name):
     """
     Input: the name of a movie
     Output: a string (one of the review options), selected at random using randint
     """
-    movie_reviews=['See it!', 'A gem!', 'Ideological claptrapl!']
-    return movie_reviews[randint(0, len(movie_reviews)-1)]
+    return ...
 
 
 
-
-## 2: (Task 2) Make Inverse Index
+## 2: (Task 0.6.6) Make Inverse Index
 def makeInverseIndex(strlist):
     """
     Input: a list of documents as strings
@@ -34,38 +31,32 @@ def makeInverseIndex(strlist):
     >>> makeInverseIndex(['hello world','hello','hello cat','hellolot of cats']) == {'hello': {0, 1, 2}, 'cat': {2}, 'of': {3}, 'world': {0}, 'cats': {3}, 'hellolot': {3}}
     True
     """
-    words=set()
-    tmpsets={}
-    for tmplist in strlist:
-        words |= set(tmplist.split())
-    for w in words:
-        tmpsetsVal=set()
-        for i in range(len(strlist)):
-            if w in strlist[i] and w in strlist[i].split():
-                tmpsetsVal |= {i}
-        tmpsets[w] = set(tmpsetsVal)
+    pass
 
-    return tmpsets
 
-## 3: (Task 3) Or Search
+
+## 3: (Task 0.6.7) Or Search
 def orSearch(inverseIndex, query):
     """
     Input: an inverse index, as created by makeInverseIndex, and a list of words to query
     Output: the set of document ids that contain _any_ of the specified words
     Feel free to use a loop instead of a comprehension.
+    
     >>> idx = makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
     >>> orSearch(idx, ['Bach','the'])
     {0, 2, 3, 4, 5}
     >>> orSearch(idx, ['Johann', 'Carl'])
     {0, 2, 3, 4, 5}
+    >>> orSearch(idx, ['Johann', 'Bach', 'Sebastian'])
+    {0, 2, 3, 4, 5}
+    >>> idx == makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
+    True
     """
-    qSets=set()
-    for i in range(len(query)):
-        if query[i] in list(inverseIndex.keys()):
-            qSets |= inverseIndex[query[i]]
-    return qSets
+    pass
 
-## 4: (Task 4) And Search
+
+
+## 4: (Task 0.6.8) And Search
 def andSearch(inverseIndex, query):
     """
     Input: an inverse index, as created by makeInverseIndex, and a list of words to query
@@ -77,10 +68,10 @@ def andSearch(inverseIndex, query):
     {2, 3}
     >>> andSearch(idx, ['Johann', 'Bach'])
     {0, 4}
+    >>> andSearch(idx, ['Johann', 'Bach', 'Sebastian'])
+    {0}
+    >>> idx == makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
+    True
     """
-    qSets=set(range(len(inverseIndex)))
-    for i in range(len(query)):
-        if query[i] in list(inverseIndex.keys()):
-            qSets &= inverseIndex[query[i]]
-    return qSets
+    pass
 
