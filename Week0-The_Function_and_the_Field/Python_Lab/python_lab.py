@@ -6,36 +6,36 @@
 
 
 ## 1: (Task 0.5.1) Minutes in a Week
-minutes_in_week = ...
+minutes_in_week = 60 * 24 * 7
 
 
 
 ## 2: (Task 0.5.2) Remainder
 #For this task, your expression must use //
-remainder_without_mod = ...
+remainder_without_mod = 2304811 - ((2304811 // 47) * 47)
 
 
 
 ## 3: (Task 0.5.3) Divisibility
-divisible_by_3 = ...
+divisible_by_3 = ((673 + 909) % 3) == 0
 
 
 
 ## 4: (Task 0.5.4) Conditional Expression
-# Replace the ... with the expression 
+# Replace the ... with the expression
 x = -9
 y = 1/2
-expression_val = ...
+expression_val = 2
 
 
 
 ## 5: (Task 0.5.5) Squares Set Comprehension
-first_five_squares = { ... for _ in {1,2,3,4,5} }
+first_five_squares = { pow(_) 5 for _ in {1,2,3,4,5} }
 
 
 
 ## 6: (Task 0.5.6) Powers-of-2 Set Comprehension
-first_five_pows_two = { ... for _ in {0,1,2,3,4} }
+first_five_pows_two = { _ * _ for _ in {0,1,2,3,4} }
 
 
 
@@ -70,7 +70,7 @@ list_of_numbers = [20, 10, 15, 75]
 # Replace ... with a one-line expression that evaluates to the average of list_of_numbers.
 # Your expression should refer to the variable list_of_numbers, and should work
 # for a list of any length greater than zero.
-list_average = ... 
+list_average = ...
 
 
 
@@ -91,7 +91,7 @@ LofL_sum = ...
 ## 13: (Task 0.5.14) Three-element tuples summing to zero
 S = {-4, -2, 1, 2, 5, 0}
 # Replace [ ... ] with a one-line list comprehension in which S appears
-zero_sum_list = [ ... ] 
+zero_sum_list = [ ... ]
 
 
 
@@ -151,7 +151,7 @@ value_list = [...]
 ## 21: (Task 0.5.22) Extracting the value corresponding to k when it exists
 dlist = [{'Bilbo':'Ian','Frodo':'Elijah'},{'Bilbo':'Martin','Thorin':'Richard'}]
 k = 'Bilbo'
-#Replace [...] with a one-line comprehension 
+#Replace [...] with a one-line comprehension
 value_list_modified_1 = [...] # <-- Use the same expression here
 k = 'Frodo'
 value_list_modified_2 = [...] # <-- as you do here
@@ -197,7 +197,7 @@ def nextInts(L): return [ ... ]
 
 ## 27: (Task 0.5.29) Procedure cubes
 # Complete the procedure definition by replacing [ ... ] with a one-line list comprehension
-def cubes(L): return [ ... ] 
+def cubes(L): return [ ... ]
 
 
 
@@ -222,4 +222,3 @@ def list2dict(L, keylist): return { ... }
 ## 30: (Task 0.5.32) Generating all three-digit numbers over a given base
 # Complete the procedure definition by replacing { ... } with a one-line set comprehension
 def all_3_digit_numbers(base, digits): return { ... }
-
