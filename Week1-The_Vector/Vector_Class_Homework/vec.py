@@ -12,15 +12,15 @@ def getitem(v,k):
     0
     """
     assert k in v.D
-    return v.f[k]
+    return v.f.get(k) if v.f.get(k) else 0
 
 def setitem(v,k,val):
     """
-    Set the element of v with label d to be val.
-    setitem(v,d,val) should set the value for key d even if d
+    Set the element of v with label k to be val.
+    setitem(v,d,val) should set the value for key k even if d
     is not previously represented in v.f, and even if val is 0.
 
-    >>> v = Vec({'a', 'b', 'c'}, {'b':0})
+        >>> v = Vec({'a', 'b', 'c'}, {'b':0})
     >>> v['b'] = 5
     >>> v['b']
     5
@@ -30,10 +30,9 @@ def setitem(v,k,val):
     >>> v['a'] = 0
     >>> v['a']
     0
-    """
+        """
     assert k in v.D
     v.f[k] = val
-    return
 
 def equal(u,v):
     """
@@ -43,7 +42,7 @@ def equal(u,v):
     Consider using brackets notation u[...] and v[...] in your procedure
     to access entries of the input vectors.  This avoids some sparsity bugs.
 
-    >>> Vec({'a', 'b', 'c'}, {'a':0}) == Vec({'a', 'b', 'c'}, {'b':0})
+        >>> Vec({'a', 'b', 'c'}, {'a':0}) == Vec({'a', 'b', 'c'}, {'b':0})
     True
     >>> Vec({'a', 'b', 'c'}, {'a': 0}) == Vec({'a', 'b', 'c'}, {})
     True
@@ -69,7 +68,21 @@ def equal(u,v):
     False
     """
     assert u.D == v.D
-    pass
+    isEqual = True
+
+    for k in u.D:
+        if (u.f.get(k) == v.f.get(k)):
+            pass
+        else:
+            if (u.f.get(k) == None and v.f.get(k) == 0):
+                pass
+            elif (u.f.get(k) == 0 and v.f.get(k) == None):
+                pass
+            else:
+                isEqual = False
+                break
+
+    return isEqual
 
 def add(u,v):
     """
@@ -108,7 +121,19 @@ def add(u,v):
     True
     """
     assert u.D == v.D
-    pass
+    f = {}
+
+    for k in u.D:
+        if (u.f.get(k) and v.f.get(k)):
+            f[k] = u.f.get(k) + v.f.get(k)
+        elif(u.f.get(k)):
+            f[k] = u.f.get(k)
+        elif(v.f.get(k)):
+            f[k] = u.f.get(k)
+        else:
+            f[k] = 0
+
+    return Vec(u.D, f)
 
 def dot(u,v):
     """
@@ -142,7 +167,12 @@ def dot(u,v):
     12
     """
     assert u.D == v.D
-    pass
+    output = 0
+
+    for k in u.D:
+        output += (u.f.get(k) if u.f.get(k) else 0) * (v.f.get(k) if v.f.get(k) else 0)
+
+    return output
 
 def scalar_mul(v, alpha):
     """
@@ -152,7 +182,7 @@ def scalar_mul(v, alpha):
     to access entries of the input vector.  This avoids some sparsity bugs.
 
     >>> zero = Vec({'x','y','z','w'}, {})
-    >>> u = Vec({'x','y','z','w'},{'x':1,'y':2,'z':3,'w':4})
+        >>> u = Vec({'x','y','z','w'},{'x':1,'y':2,'z':3,'w':4})
     >>> 0*u == zero
     True
     >>> 1*u == u
@@ -162,7 +192,12 @@ def scalar_mul(v, alpha):
     >>> u == Vec({'x','y','z','w'},{'x':1,'y':2,'z':3,'w':4})
     True
     """
-    pass
+    f = {}
+    for k in v.D:
+        if (v.f.get(k)):
+            f[k] = v.f.get(k) * alpha
+
+    return Vec(v.D, f)
 
 def neg(v):
     """
@@ -179,7 +214,12 @@ def neg(v):
     >>> -Vec({'a','b','c'}, {'a':1}) == Vec({'a','b','c'}, {'a':-1})
     True
     """
-    pass
+    f = {}
+    for k in v.D:
+        if (v.f.get(k)):
+            f[k] = v.f.get(k) * -1
+
+    return Vec(v.D, f)
 
 ###############################################################################################################################
 
