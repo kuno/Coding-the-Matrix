@@ -13,7 +13,7 @@ def getitem(M, k):
     0
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    return M.f.get((k[0], k[1])) if M.f.get((k[0], k[1])    ) else 0
 
 def equal(A, B):
     """
@@ -71,7 +71,7 @@ def setitem(M, k, val):
     True
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    M.f.update({(k[0], k[1]) : val})
 
 def add(A, B):
     """
