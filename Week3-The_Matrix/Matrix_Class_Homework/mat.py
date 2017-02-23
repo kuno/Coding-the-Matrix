@@ -145,11 +145,11 @@ def transpose(M):
     >>> M.transpose() == Mat(({0,1}, {0,1}), {(0,1):2, (1,0):3, (1,1):4})
     True
     >>> M = Mat(({'x','y','z'}, {2,4}), {('x',4):3, ('x',2):2, ('y',4):4, ('z',4):5})
-    >>> Mt = Mat(({'x','y','z'}, {2, 4}), {(4,'x'):3, (2,'x'):2, (4,'y'):4, (4,'z'):5})
+    >>> Mt = Mat(({2,4},{'x','y','z'}), {(4,'x'):3, (2,'x'):2, (4,'y'):4, (4,'z'):5})
     >>> M.transpose() == Mt
     True
     """
-    return Mat(M.D, {(c, r): v for (r, c), v in M.f.items()})
+    return Mat((M.D[1], M.D[0]), {(c, r): v for (r, c), v in M.f.items()})
 
 def vector_matrix_mul(v, M):
     """
@@ -247,9 +247,9 @@ def matrix_matrix_mul(A, B):
     for ar in A.D[0]:
         for bc in B.D[1]:
             rs = [A[ar, ac] if A.f.get((ar, ac)) else 0 for ac in A.D[1]]
-            cs = [B[br, bc] if B.f.get((br, br)) else 0 for br in B.D[0]]
-            print(ar, rs)
-            print(rs, '.', cs)
+            cs = [B[br, bc] if B.f.get((br, bc)) else 0 for br in B.D[0]]
+            print(ar, bc)
+            print(bc,',', cs)
             assert len(rs) == len(cs)
 
             f[(ar, bc)] = 0
@@ -261,6 +261,8 @@ def matrix_matrix_mul(A, B):
                 f.pop((ar, bc))
 
     return Mat((A.D[0], B.D[1]), f)
+
+
 
 ################################################################################
 
