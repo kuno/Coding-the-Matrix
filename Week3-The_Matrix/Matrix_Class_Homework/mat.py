@@ -243,7 +243,24 @@ def matrix_matrix_mul(A, B):
     True
     """
     assert A.D[1] == B.D[0]
-    pass
+    f = {}
+    for ar in A.D[0]:
+        for bc in B.D[1]:
+            rs = [A[ar, ac] if A.f.get((ar, ac)) else 0 for ac in A.D[1]]
+            cs = [B[br, bc] if B.f.get((br, br)) else 0 for br in B.D[0]]
+            print(ar, rs)
+            print(rs, '.', cs)
+            assert len(rs) == len(cs)
+
+            f[(ar, bc)] = 0
+
+            for i in range(len(rs)):
+                f[(ar, bc)] += (rs[i] * cs[i])
+
+            if (f[(ar, bc)] == 0):
+                f.pop((ar, bc))
+
+    return Mat((A.D[0], B.D[1]), f)
 
 ################################################################################
 
