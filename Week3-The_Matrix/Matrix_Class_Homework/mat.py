@@ -300,7 +300,7 @@ class Mat:
         numdec = 3
         pre = 1+max([len(str(r)) for r in rows])
         colw = {col:(1+max([len(str(col))] + [len('{0:.{1}G}'.format(M[row,col],numdec)) if isinstance(M[row,col], int) or isinstance(M[row,col], float) else len(str(M[row,col])) for row in rows])) for col in cols}
-        s1 = ' '*(1+ pre + len  (separator))
+        s1 = ' '*(1+ pre + len(separator))
         s2 = ''.join(['{0:>{1}}'.format(str(c),colw[c]) for c in cols])
         s3 = ' '*(pre+len(separator)) + '-'*(sum(list(colw.values())) + 1)
         s4 = ''.join(['{0:>{1}} {2}'.format(str(r), pre,separator)+''.join(['{0:>{1}.{2}G}'.format(M[r,c],colw[c],numdec) if isinstance(M[r,c], int) or isinstance(M[r,c], float) else '{0:>{1}}'.format(M[r,c], colw[c]) for c in cols])+'\n' for r in rows])
