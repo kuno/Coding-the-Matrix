@@ -133,7 +133,7 @@ def add(u, v):
         elif(u.f.get(k)):
             f[k] = u.f.get(k)
         elif(v.f.get(k)):
-            f[k] = u.f.get(k)
+            f[k] = v.f.get(k)
         else:
             f[k] = 0
 
