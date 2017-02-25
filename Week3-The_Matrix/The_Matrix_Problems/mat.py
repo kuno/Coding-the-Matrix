@@ -13,7 +13,7 @@ def getitem(M, k):
     0
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    return M.f.get((k[0], k[1])) if M.f.get((k[0], k[1])    ) else 0
 
 def equal(A, B):
     """
@@ -39,7 +39,18 @@ def equal(A, B):
     True
     """
     assert A.D == B.D
-    pass
+    for r in A.D[0]:
+        for c in A.D[1]:
+            if(A[r,c] == None and B[r,c] == None):
+                    pass
+            elif ((A[r,c] == 0 and B[r,c] == None) or (A[r,c] == None and B[r,c] == 0)):
+                pass
+            else:
+                if (A[r,c] != B[r,c]):
+                    return False
+                else:
+                    pass
+    return True
 
 def setitem(M, k, val):
     """
@@ -59,7 +70,7 @@ def setitem(M, k, val):
     True
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    M.f.update({(k[0], k[1]) : val})
 
 def add(A, B):
     """
@@ -87,7 +98,18 @@ def add(A, B):
     True
     """
     assert A.D == B.D
-    pass
+    M = Mat(A.D, {})
+    for r in A.D[0]:
+        for c in A.D[1]:
+                if(A[r, c] == None or B[r, c] == None):
+                    if (A[r, c] != B[r, c]):
+                        M[r, c] = A[r, c] if A[r, c] else B[r, c]
+                    else:
+                        pass
+                else:
+                    M[r, c] = A[r, c] + B[r, c]
+
+    return M
 
 def scalar_mul(M, x):
     """
@@ -101,7 +123,19 @@ def scalar_mul(M, x):
     >>> 0.25*M == Mat(({1,3,5}, {2,4}), {(1,2):1.0, (5,4):0.5, (3,4):0.75})
     True
     """
-    pass
+    A = Mat(M.D, {})
+    for r in M.D[0]:
+        for c in M.D[1]:
+            if (M[r, c]):
+                if x == 0:
+                    pass
+                    #A.f.pop((r, c))
+                else:
+                    A[r, c] = M[r, c] * x
+            else:
+                pass
+
+    return A
 
 def transpose(M):
     """
@@ -111,11 +145,11 @@ def transpose(M):
     >>> M.transpose() == Mat(({0,1}, {0,1}), {(0,1):2, (1,0):3, (1,1):4})
     True
     >>> M = Mat(({'x','y','z'}, {2,4}), {('x',4):3, ('x',2):2, ('y',4):4, ('z',4):5})
-    >>> Mt = Mat(({2,4}, {'x','y','z'}), {(4,'x'):3, (2,'x'):2, (4,'y'):4, (4,'z'):5})
+    >>> Mt = Mat(({2,4},{'x','y','z'}), {(4,'x'):3, (2,'x'):2, (4,'y'):4, (4,'z'):5})
     >>> M.transpose() == Mt
     True
     """
-    pass
+    return Mat((M.D[1], M.D[0]), {(c, r): v for (r, c), v in M.f.items()})
 
 def vector_matrix_mul(v, M):
     """
@@ -126,7 +160,7 @@ def vector_matrix_mul(v, M):
 
     >>> v1 = Vec({1, 2, 3}, {1: 1, 2: 8})
     >>> M1 = Mat(({1, 2, 3}, {'a', 'b', 'c'}), {(1, 'b'): 2, (2, 'a'):-1, (3, 'a'): 1, (3, 'c'): 7})
-    >>> v1*M1 == Vec({'a', 'b', 'c'},{'a': -8, 'b': 2, 'c': 0})
+        >>> v1*M1 == Vec({'a', 'b', 'c'},{'a': -8, 'b': 2, 'c': 0})
     True
     >>> v1 == Vec({1, 2, 3}, {1: 1, 2: 8})
     True
@@ -142,7 +176,12 @@ def vector_matrix_mul(v, M):
     True
     """
     assert M.D[0] == v.D
-    pass
+    vs = []
+    for r in M.D[0]:
+        f = {c:(M[r, c] * v.f[r] if v.f.get(r) else 0) for c in M.D[1] if M[r, c]}
+        vs.append(Vec(M.D[1], f))
+
+    return sum(vs)
 
 def matrix_vector_mul(M, v):
     """
@@ -169,7 +208,13 @@ def matrix_vector_mul(M, v):
     True
     """
     assert M.D[1] == v.D
-    pass
+    vs = []
+    for c in M.D[1]:
+        vs.append(
+        Vec(M.D[0], {r:(M[r, c] * v[c] if v.f.get(c) else 0) for r in M.D[0] if M[r, c]})
+        )
+
+    return sum(vs)
 
 def matrix_matrix_mul(A, B):
     """
@@ -198,7 +243,26 @@ def matrix_matrix_mul(A, B):
     True
     """
     assert A.D[1] == B.D[0]
-    pass
+    f = {}
+    for ar in A.D[0]:
+        for bc in B.D[1]:
+            rs = [A[ar, ac] if A.f.get((ar, ac)) else 0 for ac in A.D[1]]
+            cs = [B[br, bc] if B.f.get((br, bc)) else 0 for br in B.D[0]]
+            print(ar, bc)
+            print(bc,',', cs)
+            assert len(rs) == len(cs)
+
+            f[(ar, bc)] = 0
+
+            for i in range(len(rs)):
+                f[(ar, bc)] += (rs[i] * cs[i])
+
+            if (f[(ar, bc)] == 0):
+                f.pop((ar, bc))
+
+    return Mat((A.D[0], B.D[1]), f)
+
+
 
 ################################################################################
 

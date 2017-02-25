@@ -150,7 +150,14 @@ def lin_comb_mat_vec_mult(M, v):
     True
     '''
     assert(M.D[1] == v.D)
-    pass
+    vs = []
+    for c in v.D:
+        _v = v[c] if v.f.get(c) else 0
+        f = {r: (_v * M[r, c] if M.f.get((r, c)) else 0) for r in M.D[0]}
+
+        vs.append(Vec(M.D[0], f))
+
+    return sum(vs)
 
 
 
@@ -175,7 +182,12 @@ def lin_comb_vec_mat_mult(v, M):
       True
     '''
     assert(v.D == M.D[0])
-    pass
+    vs = []
+    for r in v.D:
+        _v = v[r] if v.f.get(r) else 0
+        vs.append(Vec(M.D[1], {c: (_v * M[r, c] if M.f.get((r, c)) else 0) for c in M.D[1]}))
+
+    return sum(vs)
 
 
 
@@ -198,8 +210,17 @@ def dot_product_mat_vec_mult(M, v):
     True
     '''
     assert(M.D[1] == v.D)
-    pass
+    f = {}
+    for r in M.D[0]:
+        f[r] = 0
+        arr1 = [M[r, c] if M.f.get((r, c)) else 0 for c in M.D[1]]
+        arr2 = [v[c] if v.f.get(c) else 0 for c in v.D]
 
+        assert len(arr1) == len(arr2)
+        for i in range(len(arr1)):
+            f[r] += (arr1[i] * arr2[i])
+
+    return Vec(M.D[0], f)
 
 
 ## 13: (Problem 4.17.16) Dot-product vector-matrix multiply
@@ -220,7 +241,17 @@ def dot_product_vec_mat_mult(v, M):
       True
       '''
     assert(v.D == M.D[0])
-    pass
+    f = {}
+    for c in M.D[1]:
+        f[c] = 0
+        arr1 = [M[r, c] if M.f.get((r, c)) else 0 for r in M.D[0]]
+        arr2 = [v[r] if v.f.get(r) else 0 for r in v.D]
+
+        assert len(arr1) == len(arr2)
+        for i in range(len(arr1)):
+            f[c] += (arr1[i] * arr2[i])
+
+    return Vec(M.D[1], f)
 
 
 
@@ -235,8 +266,25 @@ def Mv_mat_mat_mult(A, B):
 ## 15: (Problem 4.17.18) Vector-matrix matrix-matrix multiply
 def vM_mat_mat_mult(A, B):
     assert A.D[1] == B.D[0]
-    pass
+    d = {}
+    for r in A.D[0]:
+        v = Vec(A.D[1], {c:A[r, c] if A.f.get((r, c)) else 0 for c in A.D[1]})
+        print(v)
+        p = v * B
+        print(p)
+        d[r] = p
 
+    print(d)
+    f = {}
+
+    for i in range(len(A.D[0])):
+        for j in range(len(A.D[1])):
+            r = list(A.D[0])[i]
+            r1 = list(A.D[0])[j]
+            print(r, r1)
+            c = list(B.D[0])[j]
+            f[(r, c)] = d[r][r1]
+    return Mat((A.D[0], A.D[1]), f)
 
 
 ## 16: (Problem 4.17.19) Comparing countries using dot-product
