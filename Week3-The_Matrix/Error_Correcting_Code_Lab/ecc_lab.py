@@ -5,17 +5,17 @@ from vec import Vec
 from mat import Mat
 from bitutil import bits2mat, str2bits, noise
 from GF2 import one
-
+from matutil import listlist2mat
 ## Task 1
 """ Create an instance of Mat representing the generator matrix G. You can use
 the procedure listlist2mat in the matutil module (be sure to import first).
 Since we are working over GF (2), you should use the value one from the
 GF2 module to represent 1"""
-G = None
+G = listlist2mat([[one, 0, one, one], [one,one,0,one],[0,0,0,one],[one,one,one,0],[0, 0,one,0],[0,one,0,0], [one, 0, 0,0]])
 
 ## Task 2
 # Please write your answer as a list. Use one from GF2 and 0 as the elements.
-encoding_1001 = None
+encoding_1001 = [0, 0, one, one, 0, 0, one]
 
 
 ## Task 3
@@ -23,8 +23,8 @@ encoding_1001 = None
 R = None
 
 ## Task 4
-# Create an instance of Mat representing the check matrix H.
-H = None
+# Create an instance of Mat representing the check matrix H .
+H = listlist2mat([[0, 0, 0, one, one, one, one],[0, one, one, 0, 0, one, one],[one, 0, one, 0, one,0, one]])
 
 ## Task 5
 def find_error(syndrome):
@@ -36,7 +36,7 @@ def find_error(syndrome):
         True
         >>> find_error(Vec({0,1,2}, {2:one})) == Vec({0, 1, 2, 3, 4, 5, 6},{0: one})
         True
-        >>> find_error(Vec({0,1,2}, {1:one, 2:one})) == Vec({0, 1, 2, 3, 4, 5, 6},{2: one})   
+        >>> find_error(Vec({0,1,2}, {1:one, 2:one})) == Vec({0, 1, 2, 3, 4, 5, 6},{2: one})
         True
         >>> find_error(Vec({0,1,2}, {})) == Vec({0,1,2,3,4,5,6}, {})
         True
@@ -46,8 +46,8 @@ def find_error(syndrome):
 ## Task 6
 # Use the Vec class for your answers.
 non_codeword = Vec({0,1,2,3,4,5,6}, {0: one, 1:0, 2:one, 3:one, 4:0, 5:one, 6:one})
-error_vector = Vec(..., ...)
-code_word = Vec(..., ...)
+#error_vector = Vec(..., ...)
+#code_word = Vec(..., ...)
 original = ... # R * code_word
 
 
@@ -87,4 +87,3 @@ def correct(A):
         True
     """
     pass
-

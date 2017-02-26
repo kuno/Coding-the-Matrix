@@ -327,26 +327,26 @@ def dictlist_helper(dlist, k):
     >>> dictlist_helper([{'apple':'Apfel','bread':'Brot'},{'apple':'manzana', 'bread':'pan'},{'apple':'pomme','bread':'pain'}], 'apple')
     ['Apfel', 'manzana', 'pomme']
     '''
-    pass
+    return [d[k] for d in dlist if d.get(k)]
 
 
 
 ## 18: (Problem 4.17.21) Solving 2x2 linear systems and finding matrix inverse
-solving_systems_x1 = ...
-solving_systems_x2 = ...
-solving_systems_y1 = ...
-solving_systems_y2 = ...
-solving_systems_m = Mat(({0, 1}, {0, 1}), {...:...})
-solving_systems_a = Mat(({0, 1}, {0, 1}), {...:...})
-solving_systems_a_times_m = Mat(({0, 1}, {0, 1}), {...:...})
-solving_systems_m_times_a = Mat(({0, 1}, {0, 1}), {...:...})
+solving_systems_x1 = - (1 / 5)
+solving_systems_x2 = 2 / 5
+solving_systems_y1 = 4 / 5
+solving_systems_y2 = - (3 / 5)
+solving_systems_m = Mat(({0, 1}, {0, 1}), {(0, 0): -(1/5), (0, 1): 4 / 5, (1, 0) : 2 / 5, (1, 1): - (3 / 5)})
+solving_systems_a = Mat(({0, 1}, {0, 1}), {(0, 0): 3, (0, 1): 4, (1, 0) : 2, (1, 1): 1})
+solving_systems_a_times_m = Mat(({0, 1}, {0, 1}), {(0, 0): 1, (0, 1): 0, (1, 0) : 0, (1, 1): 1}})
+solving_systems_m_times_a = Mat(({0, 1}, {0, 1}), {(0, 0): 1, (0, 1): 0, (1, 0) : 0, (1, 1): 1})
 
 
 
 ## 19: (Problem 4.17.22) Matrix inverse criterion
 # Please write your solutions as booleans (True or False)
 
-are_inverses1 = ...
-are_inverses2 = ...
-are_inverses3 = ...
-are_inverses4 = ...
+are_inverses1 = True
+are_inverses2 = False
+are_inverses3 = False
+are_inverses4 = False
