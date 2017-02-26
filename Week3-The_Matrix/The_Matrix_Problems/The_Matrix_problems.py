@@ -4,6 +4,9 @@
 from mat import Mat
 from vec import Vec
 
+from matutil import rowdict2mat
+from matutil import coldict2mat
+
 
 
 ## 1: (Problem 4.17.1) Computing matrix-vector products
@@ -259,9 +262,14 @@ def dot_product_vec_mat_mult(v, M):
 # You are allowed to use the matutil module
 def Mv_mat_mat_mult(A, B):
     assert A.D[1] == B.D[0]
-    pass
-
-
+    d = {}
+    for c in B.D[1]:
+        v = Vec(B.D[0], {r: B[r, c] if B.f.get((r, c)) else 0 for r in B.D[0]})
+        print(v)
+        p = A * v
+        print(p)
+        d[c] = p
+    return coldict2mat(d)
 
 ## 15: (Problem 4.17.18) Vector-matrix matrix-matrix multiply
 def vM_mat_mat_mult(A, B):
@@ -284,18 +292,28 @@ def vM_mat_mat_mult(A, B):
             print(r, r1)
             c = list(B.D[0])[j]
             f[(r, c)] = d[r][r1]
-    return Mat((A.D[0], A.D[1]), f)
+    return rowdict2mat(d)
 
 
 ## 16: (Problem 4.17.19) Comparing countries using dot-product
 # Provide a set consisting of two strings
-most_opposed_pair_of_countries = {..., ...}
+most_opposed_pair_of_countries = {"United_States_of_America", "Belarus"}
 
 # Provide a ten-element list of two-element sets of strings
-most_opposed_10_pairs_of_countries = [{..., ...}, ..., {..., ...}]
+most_opposed_10_pairs_of_countries = [
+{'United_States_of_America', 'Belarus'},
+{'United_States_of_America', 'Syria'},
+{'United_States_of_America', 'Cuba'},
+{'United_States_of_America', 'Algeria'},
+{'United_States_of_America', 'Viet_Nam'},
+{'United_States_of_America', 'Libya'},
+{'United_States_of_America', 'Guinea'},
+{'United_States_of_America', 'Mongolia'},
+{'United_States_of_America', 'Mali'},
+{'United_States_of_America', 'Sudan'}]
 
 # Provide a set consisting of two strings
-most_agreeing_pair_of_countries = {..., ...}
+most_agreeing_pair_of_countries = {'Thailand', 'Philippines'}
 
 
 
