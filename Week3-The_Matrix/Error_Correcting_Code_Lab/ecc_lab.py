@@ -20,7 +20,7 @@ encoding_1001 = [0, 0, one, one, 0, 0, one]
 
 ## Task 3
 # Express your answer as an instance of the Mat class.
-R = None
+R = listlist2mat([[one, one, 0, 0, one, one, one], [0, one, one, one, one, one, 0], [one, 0, one, 0, 0, 0, one], [0, 0, one, one, one, one, one]])
 
 ## Task 4
 # Create an instance of Mat representing the check matrix H .
