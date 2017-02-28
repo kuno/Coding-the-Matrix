@@ -1,4 +1,4 @@
-# version code 80e56511a793+
+    # version code 80e56511a793+
 # Please fill out this stencil and submit using the provided submission script.
 
 from vec import Vec
@@ -41,15 +41,26 @@ def find_error(syndrome):
         >>> find_error(Vec({0,1,2}, {})) == Vec({0,1,2,3,4,5,6}, {})
         True
     """
-    pass
+    #assert H.D[0] == syndrome.D
+    d = {}
+    for c in H.D[1]:
+        v = Vec(H.D[0], {r: H[r, c] if H.f.get((r, c)) else 0 for r in H.D[0]})
+        d[c] = v
+
+    f = {}
+    for c, v in d.items():
+        if v == syndrome:
+            f[c] = one
+
+
+    return Vec(H.D[1], f)
 
 ## Task 6
 # Use the Vec class for your answers.
 non_codeword = Vec({0,1,2,3,4,5,6}, {0: one, 1:0, 2:one, 3:one, 4:0, 5:one, 6:one})
-#error_vector = Vec(..., ...)
-#code_word = Vec(..., ...)
-original = ... # R * code_word
-
+error_vector = Vec({0, 1, 2, 3, 4, 5, 6},{6: one})
+code_word = Vec({0, 1, 2, 3, 4, 5, 6},{0: one, 1: 0, 2: one, 3: one, 4: 0, 5: one, 6: 0})
+original = Vec({0, 1, 2, 3},{0: 0, 1: one, 2: 0, 3: one})
 
 ## Task 7
 def find_error_matrix(S):
@@ -61,20 +72,33 @@ def find_error_matrix(S):
         >>> find_error_matrix(S) == Mat(({0, 1, 2, 3, 4, 5, 6}, {0, 1, 2, 3}), {(1, 3): 0, (3, 0): 0, (2, 1): 0, (6, 2): 0, (5, 1): one, (0, 3): 0, (4, 0): 0, (1, 2): 0, (3, 3): 0, (6, 3): 0, (5, 0): 0, (2, 2): 0, (4, 1): 0, (1, 1): 0, (3, 2): one, (0, 0): 0, (6, 0): 0, (2, 3): 0, (4, 2): 0, (1, 0): 0, (5, 3): 0, (0, 1): 0, (6, 1): 0, (3, 1): 0, (2, 0): 0, (4, 3): one, (5, 2): 0, (0, 2): 0})
         True
     """
-    pass
+    d = {}
+    for c in S.D[1]:
+        v = find_error(Vec(S.D[0], {r: S[r, c] if S.f.get((r, c)) else 0 for r in S.D[0]}))
+
+        d[c] = v
+
+    f = {}
+    for c in d:
+        for r in d[c].D:
+            f[r, c] = d[c][r] if d[c].f.get(r) else 0
+
+    return Mat((H.D[1], S.D[1]), f)
+
+
 
 ## Task 8
 s = "I'm trying to free your mind, Neo. But I can only show you the door. You're the one that has to walk through it."
-P = None
+P = bits2mat(str2bits(s))
 
 ## Task 9
-C = None
-bits_before = None
-bits_after = None
+C = G * P
+bits_before = len(P.D[0]) * len(P.D[1])
+bits_after = len(C.D[0]) * len(C.D[1])
 
 
 ## Ungraded Task
-CTILDE = None
+CTILDE = noise(C, 0.02) + C
 
 ## Task 10
 def correct(A):
@@ -86,4 +110,4 @@ def correct(A):
         >>> correct(A) == Mat(({0, 1, 2, 3, 4, 5, 6}, {1, 2, 3}), {(0, 1): 0, (1, 2): 0, (3, 2): 0, (1, 3): 0, (3, 3): 0, (5, 2): one, (6, 1): 0, (3, 1): 0, (2, 1): 0, (0, 2): one, (6, 3): one, (4, 2): 0, (6, 2): one, (2, 3): 0, (4, 3): 0, (2, 2): 0, (5, 1): 0, (0, 3): one, (4, 1): 0, (1, 1): 0, (5, 3): one})
         True
     """
-    pass
+    return find_error_matrix(H * A) + A
