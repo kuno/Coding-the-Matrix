@@ -4,7 +4,7 @@
 from GF2 import one
 from math import sqrt, pi
 from matutil import coldict2mat
-from solver import solve
+#from solver import solve
 from vec import Vec
 from vecutil import list2vec
 
@@ -15,10 +15,10 @@ from vecutil import list2vec
 # the generators of V.
 #
 # For example, [1, 3, 5] would mean 1*[2,0,4,0] + 3*[0,1,0,1] + 5*[0,0,-1,-1]
-
-rep_1 = [...]
-rep_2 = [...]
-rep_3 = [...]
+# [2,1,4,1]
+rep_1 = [1, 1, 0]
+rep_2 = [1/2, 1, 1]
+rep_3 = [0, 1, -1]
 
 
 
@@ -254,7 +254,7 @@ def subset_basis(T):
     '''
     Input:
         - T: a list of Vecs
-    Output: 
+    Output:
         - list S containing Vecs from T that is a basis for the space spanned by T.
     Examples:
         The following tests use the procedures is_superfluous and is_independent,
@@ -333,4 +333,3 @@ def exchange(S, A, z):
         True
     '''
     pass
-
