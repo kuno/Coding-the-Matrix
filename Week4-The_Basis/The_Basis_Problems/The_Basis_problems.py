@@ -131,18 +131,18 @@ sum_to_zero_4 = [one, one, one, one, one, 0, 0]
 ## 11: (Problem 5.14.11) Exchange Lemma for Vectors over $\R$
 ## Please express your answer as a list of ints, such as [1,0,0,0,0]
 
-exchange_1 = [0, 0, 0, 0, 1]
-exchange_2 = [...]
-exchange_3 = [...]
+exchange_1 = [0, 0, one, 0, 0]
+exchange_2 = [0, 0, 0, one, 0]
+exchange_3 = [0, 0, one, 0, 0]
 
 
 
 ## 12: (Problem 5.14.12) Exchange Lemma for Vectors over GF(2)
 # Please give the name of the vector you want to replace as a string (e.g. 'v1')
 
-replace_1 = ...
-replace_2 = ...
-replace_3 = ...
+replace_1 = 'v2'
+replace_2 = 'v1'
+replace_3 = 'v1'
 
 
 ## 13: (Problem 5.14.13) rep2vec
