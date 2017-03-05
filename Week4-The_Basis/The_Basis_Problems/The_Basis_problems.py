@@ -3,10 +3,12 @@
 
 from GF2 import one
 from math import sqrt, pi
+from matutil import rowdict2mat
 from matutil import coldict2mat
-#from solver import solve
+from solver import solve
 from vec import Vec
 from vecutil import list2vec
+from vecutil import zero_vec
 
 
 
@@ -113,23 +115,23 @@ zero_comb_3 = [one, one, 0, 0, one]
 # In each subproblem, give your solution as a list of coefficients selected from {0, one}
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5]
-sum_to_zero_1 = [...]
+sum_to_zero_1 = [0, one, 0, one, one]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5, coeff of v7, coeff of v8]
-sum_to_zero_2 = [...]
+sum_to_zero_2 = [0, one, 0, one, one, 0, 0]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v6]
-sum_to_zero_3 = [...]
+sum_to_zero_3 = [one, 0, one, one, one]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v5, coeff of v6, coeff of v7, coeff of v8]
-sum_to_zero_4 = [...]
+sum_to_zero_4 = [one, one, one, one, one, 0, 0]
 
 
 
 ## 11: (Problem 5.14.11) Exchange Lemma for Vectors over $\R$
 ## Please express your answer as a list of ints, such as [1,0,0,0,0]
 
-exchange_1 = [...]
+exchange_1 = [0, 0, 0, 0, 1]
 exchange_2 = [...]
 exchange_3 = [...]
 
@@ -141,7 +143,6 @@ exchange_3 = [...]
 replace_1 = ...
 replace_2 = ...
 replace_3 = ...
-
 
 
 ## 13: (Problem 5.14.13) rep2vec
@@ -162,9 +163,9 @@ def rep2vec(u, veclist):
         >>> rep2vec(Vec({0,1,2}, {0:2, 1:4}), [v0, v1, v2]) == Vec({'d', 'a', 'c', 'b'},{'a': 6, 'c': 0, 'b': 8, 'd': 0})
         True
     '''
-    pass
+    m = coldict2mat({k:veclist[k] for k in range(len(veclist))})
 
-
+    return m * u
 
 ## 14: (Problem 5.14.14) vec2rep
 def vec2rep(veclist, v):
@@ -182,7 +183,9 @@ def vec2rep(veclist, v):
         >>> vec2rep([v0,v1,v2], v)  == Vec({0, 1, 2},{0: 1.5, 1: -0.25, 2: 1.25})
         True
     '''
-    pass
+    m = coldict2mat({k:veclist[k] for k in range(len(veclist))})
+
+    return solve(m, v)
 
 
 
@@ -208,14 +211,35 @@ def is_superfluous(L, i):
     True
     >>> L == [Vec(D,{'a':1,'b':-1}),Vec(D,{'c':-1,'b':1}),Vec(D,{'c':1,'d':-1}),Vec(D, {'a':-1,'d':1}),Vec(D,{'b':1, 'c':1, 'd':-1})]
     True
-    >>> is_superfluous([Vec({0,1}, {})], 0)
+    >>>
     True
     >>> is_superfluous([Vec({0,1}, {0:1})], 0)
     False
     '''
-    pass
+    veclist = [v for j, v in enumerate(L) if j != i]
 
+    u = L[i]
 
+    print(u)
+
+    #
+    if (len(veclist) == 0):
+        veclist.append(zero_vec(u.D))
+
+    A = coldict2mat({k:veclist[k] for k in range(len(veclist))})
+    print(A)
+
+    try:
+        b = solve(A, u)
+    except Exception:
+        return False
+
+    #
+    #u = Vec(x.D, {k:round(v) for k, v in x.f.items()})
+
+    print(b)
+
+    return (u - A * b).is_almost_zero()
 
 ## 16: (Problem 5.14.16) is_independent in Python
 def is_independent(L):
@@ -245,8 +269,14 @@ def is_independent(L):
         >>> vlist == [Vec({0, 1, 2},{0: 1}), Vec({0, 1, 2},{1: 1}), Vec({0, 1, 2},{2: 1}), Vec({0, 1, 2},{0: 1, 1: 1, 2: 1}), Vec({0, 1, 2},{1: 1, 2: 1}), Vec({0, 1, 2},{0: 1, 1: 1})]
         True
     '''
-    pass
+    #
+    #m = coldict2mat({k:L[k] for k in range(len(L))})
+    #print(m)
+    for i, v in enumerate(L):
+        if is_superfluous(L, i):
+            return False
 
+    return True
 
 
 ## 17: (Problem 5.14.17) Subset Basis
@@ -269,7 +299,7 @@ def subset_basis(T):
         True
         >>> is_independent(sb)
         True
-        >>> all(is_superfluous([a]+sb, 0) for a in [a0, a1, a2, a3])
+            >>> all(is_superfluous([a]+sb, 0) for a in [a0, a1, a2, a3])
         True
 
         >>> b0 = Vec({0,1,2,3},{0:2,1:2,3:4})
@@ -284,8 +314,14 @@ def subset_basis(T):
         >>> all(is_superfluous([b]+sb, 0) for b in [b0, b1, b2, b3])
         True
     '''
-    pass
+    for i, v in enumerate(T):
+        l = T.copy()
+        l.remove(v)
+        print(l)
+        if is_independent(l) and is_superfluous(T, i):
+            return l
 
+    return []
 
 
 ## 18: (Problem 5.14.18) Superset Basis Lemma in Python
@@ -316,7 +352,6 @@ def superset_basis(T, L):
     pass
 
 
-
 ## 19: (Problem 5.14.19) Exchange Lemma in Python
 def exchange(S, A, z):
     '''
@@ -332,4 +367,23 @@ def exchange(S, A, z):
         >>> exchange(S, A, z) == Vec({0, 1, 2, 3},{0: 0, 1: 0, 2: 1, 3: 0})
         True
     '''
-    pass
+    for i, w in enumerate([v for v in S if v not in A]):
+        l = S.copy()
+        l.remove(w)
+
+        veclist = [z] + l
+
+        A = coldict2mat({k:veclist[k] for k in range(len(veclist))})
+        print(A)
+
+        try:
+            b = solve(A, w)
+        except Exception:
+            return None
+
+        print(b)
+
+        if (w - A * b).is_almost_zero():
+            return w
+
+    return None
