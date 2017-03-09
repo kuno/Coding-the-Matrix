@@ -8,7 +8,7 @@ from mat import Mat
 from vec import Vec
 import math
 
-## Task 1
+# Task 1
 def identity():
     '''
     Return the matrix that, when multiplied by a location vector, yields the same location vector.
@@ -16,35 +16,58 @@ def identity():
     >>> identity() * Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1}) == Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1})
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    return Mat((D, D), {(r, c): 1 if r == c else 0 for r in D for c in D})
 
-## Task 2
-def translation(alpha,beta):
+# Task 2
+def translation(alpha, beta):
     '''
     Input:  a scalar alpha (the increase to the x-coordinate) and a scalar beta (the increase to the y-coordinate)
-    Output:  3x3 matrix that, when multiplied by a location vector representing (x,y),
-                          yields the location vector of the translated point (x+alpha, y+beta).
+    Output:  3x3 matrix that, when multiplied by a location vector representing (x,y), yields the location vector of the translated point (x+alpha, y+beta).
 
     >>> translation(4,-5) * Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1}) == Vec({'x','y','u'}, {'x':6, 'y':-2, 'u':1})
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c):
+                f[(r, c)] = 1
+            elif (r == 'x' and c == 'u'):
+                f[(r, c)] = int(alpha)
+            elif (r == 'y' and c == 'u'):
+                f[(r, c)] = int(beta)
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 3
+# Task 3
 def scale(alpha, beta):
     '''
-    Input:  a scalar alpha (the multiplier for the x-coordinate) and a scalar beta (the multiplier for the y-coordinate) 
-    Output:  3x3 matrix that, when multiplied by a locaiton vector representing (x,y),
-                           yields the locaiton vector of the scaled point (alpha*x, beta*y).
+    Input:  a scalar alpha (the multiplier for the x-coordinate) and a scalar beta (the multiplier for the y-coordinate)
+    Output:  3x3 matrix that, when multiplied by a locaiton vector representing (x,y),yields the locaiton vector of the scaled point (alpha*x, beta*y).
 
     >>> scale(3,4)*Vec({'x','y','u'}, {'x':1,'y':2,'u':1}) == Vec({'x','y','u'}, {'x':3, 'y':8, 'u':1})
     True
     >>> scale(0,0)*Vec({'x','y','u'}, {'x':1,'y':1,'u':1}) == Vec({'x','y','u'}, {'u':1})
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c == 'u'):
+                f[(r, c)] = 1
+            elif (r == c == 'x'):
+                f[(r, c)] = int(alpha)
+            elif (r == c == 'y'):
+                f[(r, c)] = int(beta)
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 4
+# Task 4
 def rotation(theta):
     '''
     Input:  theta, the angle (in radians) to rotate an image.
@@ -72,7 +95,7 @@ def rotate_about(theta, x, y):
     '''
     pass
 
-## Task 6
+# Task 6
 def reflect_y():
     '''
     Input:  None.
@@ -83,9 +106,23 @@ def reflect_y():
     >>> reflect_y()* Vec({'x','y','u'}, {'u':1}) == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c == 'u'):
+                f[(r, c)] = 1
+            elif (r == c == 'x'):
+                f[(r, c)] = -1
+            elif (r == c == 'y'):
+                f[(r, c)] = 1
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 7
+# Task 7
+
+
 def reflect_x():
     '''
     Input:  None.
@@ -96,10 +133,24 @@ def reflect_x():
     >>> reflect_x()*Vec({'x','y','u'}, {'u':1}) == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c == 'u'):
+                f[(r, c)] = 1
+            elif (r == c == 'x'):
+                f[(r, c)] = 1
+            elif (r == c == 'y'):
+                f[(r, c)] = -1
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 8    
-def scale_color(scale_r,scale_g,scale_b):
+# Task 8
+
+
+def scale_color(scale_r, scale_g, scale_b):
     '''
     Input:  3 scaling parameters for the colors of the image.
     Output:  Corresponding 3x3 color scaling matrix.
@@ -107,17 +158,42 @@ def scale_color(scale_r,scale_g,scale_b):
     >>> scale_color(1,2,3)*Vec({'r','g','b'},{'r':1,'g':2,'b':3}) == Vec({'r','g','b'},{'r':1,'g':4,'b':9})
     True
     '''
-    pass
+    D = {'r', 'g', 'b'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c == 'r'):
+                f[(r, c)] = scale_r
+            elif (r == c == 'g'):
+                f[(r, c)] = scale_g
+            elif (r == c == 'b'):
+                f[(r, c)] = scale_b
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 9
+# Task 9
+
+
 def grayscale():
     '''
     Input: None
     Output: 3x3 greyscale matrix.
     '''
-    pass
+    D = {'r', 'g', 'b'}
+    f = {}
+    for c in D:
+        if (c == 'r'):
+            f[(r, c)] = 77 / 256
+        elif (c == 'g'):
+            f[(r, c)] = 151 / 256
+        elif (c == 'b'):
+            f[(r, c)] = 28 / 256
+    return Mat((D, D), f)
 
-## Task 10
+# Task 10
+
+
 def reflect_about(x1, y1, x2, y2):
     '''
     Input: 2 points that define a line to reflect about.
@@ -129,5 +205,3 @@ def reflect_about(x1, y1, x2, y2):
     True
     '''
     pass
-
-
