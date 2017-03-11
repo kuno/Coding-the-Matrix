@@ -9,43 +9,77 @@ from mat import Mat
 from vec import Vec
 
 
+# 1: (Problem 6.7.2) Iterative Exchange Lemma
+w0 = list2vec([1, 0, 0])
+w1 = list2vec([0, 1, 0])
+w2 = list2vec([0, 0, 1])
 
-## 1: (Problem 6.7.2) Iterative Exchange Lemma
-w0 = list2vec([1,0,0])
-w1 = list2vec([0,1,0])
-w2 = list2vec([0,0,1])
-
-v0 = list2vec([1,2,3])
-v1 = list2vec([1,3,3])
-v2 = list2vec([0,3,3])
+v0 = list2vec([1, 2, 3])
+v1 = list2vec([1, 3, 3])
+v2 = list2vec([0, 3, 3])
 
 # Fill in exchange_S1 and exchange_S2
 # with appropriate lists of 3 vectors
 
 exchange_S0 = [w0, w1, w2]
-exchange_S1 = [...]
-exchange_S2 = [...]
+exchange_S1 = [w0, w1, v2]
+exchange_S2 = [w0, v1, v2]
 exchange_S3 = [v0, v1, v2]
 
 
+# 2: (Problem 6.7.3) Another Iterative Exchange Lemma
+w0 = list2vec([0, one, 0])
+w1 = list2vec([0, 0, one])
+w2 = list2vec([one, one, one])
 
-## 2: (Problem 6.7.3) Another Iterative Exchange Lemma
-w0 = list2vec([0,one,0])
-w1 = list2vec([0,0,one])
-w2 = list2vec([one,one,one])
-
-v0 = list2vec([one,0,one])
-v1 = list2vec([one,0,0])
-v2 = list2vec([one,one,0])
+v0 = list2vec([one, 0, one])
+v1 = list2vec([one, 0, 0])
+v2 = list2vec([one, one, 0])
 
 exchange_2_S0 = [w0, w1, w2]
-exchange_2_S1 = [...]
-exchange_2_S2 = [...]
+exchange_2_S1 = [w0, w1, v0]
+exchange_2_S2 = [w0, v2, v0]
 exchange_2_S3 = [v0, v1, v2]
 
 
+## 19: (Problem 5.14.19) Exchange Lemma in Python
+def exchange(S, A, z):
+    '''
+    Input:
+        - S: a list of vectors, as instances of your Vec class
+        - A: a list of vectors, each of which are in S, with len(A) < len(S)
+        - z: an instance of Vec such that A+[z] is linearly independent
+    Output: a vector w in S but not in A such that Span S = Span ({z} U S - {w})
+    Example:
+        >>> S = [list2vec(v) for v in [[0,0,5,3],[2,0,1,3],[0,0,1,0],[1,2,3,4]]]
+        >>> A = [list2vec(v) for v in [[0,0,5,3],[2,0,1,3]]]
+        >>> z = list2vec([0,2,1,1])
+        >>> exchange(S, A, z) == Vec({0, 1, 2, 3},{0: 0, 1: 0, 2: 1, 3: 0})
+        True
+    '''
+    for i, w in enumerate([v for v in S if v not in A]):
+        l = S.copy()
+        l.remove(w)
 
-## 3: (Problem 6.7.4) Morph Lemma Coding
+        veclist = [z] + l
+
+        A = coldict2mat({k:veclist[k] for k in range(len(veclist))})
+        print(A)
+
+        try:
+            b = solve(A, w)
+        except Exception:
+            return None
+
+        print(b)
+
+        if (w - A * b).is_almost_zero():
+            return w
+
+    return None
+
+# TODO: Make it with random ordered S
+# 3: (Problem 6.7.4) Morph Lemma Coding
 def morph(S, B):
     '''
     Input:
@@ -56,7 +90,7 @@ def morph(S, B):
         >>> # This is how our morph works.  Yours may yield different results.
         >>> # Note: Make a copy of S to modify instead of modifying S itself.
         >>> from vecutil import list2vec
-        >>> from vec import Vec
+            >>> from vec import Vec
         >>> S = [list2vec(v) for v in [[1,0,0],[0,1,0],[0,0,1]]]
         >>> B = [list2vec(v) for v in [[1,1,0],[0,1,1],[1,0,1]]]
         >>> D = {0, 1, 2}
@@ -79,11 +113,19 @@ def morph(S, B):
         >>> sol == [(B[0],S[0]), (B[1],S[2]), (B[2],S[3])] or sol == [(B[0],S[1]), (B[1],S[2]), (B[2],S[3])]
         True
     '''
-    pass
+    T = []
+    S0 = S.copy()
+
+    for k, b in enumerate(B):
+        A = B[:k] + B[k+1:]
+        w = exchange(S0 + A, A, b)
+        T.append((b, w))
+        S0.remove(w)
+
+    return T
 
 
-
-## 4: (Problem 6.7.5) Row and Column Rank Practice
+# 4: (Problem 6.7.5) Row and Column Rank Practice
 # Please express each solution as a list of Vecs
 
 row_space_1 = [...]
@@ -99,8 +141,7 @@ row_space_4 = [...]
 col_space_4 = [...]
 
 
-
-## 5: (Problem 6.7.6) My Is Independent Procedure
+# 5: (Problem 6.7.6) My Is Independent Procedure
 def my_is_independent(L):
     '''
     Input:
@@ -130,13 +171,12 @@ def my_is_independent(L):
     pass
 
 
-
-## 6: (Problem 6.7.7) My Rank
+# 6: (Problem 6.7.7) My Rank
 def my_rank(L):
     '''
-    Input: 
+    Input:
         - L: a list of Vecs
-    Output: 
+    Output:
         - the rank of the list of Vecs
     Example:
         >>> L = [list2vec(v) for v in [[1,2,3],[4,5,6],[1.1,1.1,1.1]]]
@@ -150,8 +190,7 @@ def my_rank(L):
     pass
 
 
-
-## 7: (Problem 6.7.9) Direct Sum Validity
+# 7: (Problem 6.7.9) Direct Sum Validity
 # Please give each answer as a boolean
 
 only_share_the_zero_vector_1 = ...
@@ -159,8 +198,7 @@ only_share_the_zero_vector_2 = ...
 only_share_the_zero_vector_3 = ...
 
 
-
-## 8: (Problem 6.7.11) Direct Sum Unique Representation
+# 8: (Problem 6.7.11) Direct Sum Unique Representation
 def direct_sum_decompose(U_basis, V_basis, w):
     '''
     Input:
@@ -202,8 +240,7 @@ def direct_sum_decompose(U_basis, V_basis, w):
     pass
 
 
-
-## 9: (Problem 6.7.12) Is Invertible Function
+# 9: (Problem 6.7.12) Is Invertible Function
 def is_invertible(M):
     '''
     input: A matrix, M
@@ -220,8 +257,7 @@ def is_invertible(M):
     pass
 
 
-
-## 10: (Problem 6.7.13) Inverse of a Matrix over GF(2)
+# 10: (Problem 6.7.13) Inverse of a Matrix over GF(2)
 def find_matrix_inverse(A):
     '''
     Input:
@@ -236,8 +272,7 @@ def find_matrix_inverse(A):
     pass
 
 
-
-## 11: (Problem 6.7.14) Inverse of a Triangular Matrix
+# 11: (Problem 6.7.14) Inverse of a Triangular Matrix
 def find_triangular_matrix_inverse(A):
     '''
     Supporting GF2 is not required.
@@ -246,11 +281,10 @@ def find_triangular_matrix_inverse(A):
         - A: an upper triangular Mat with nonzero diagonal elements
     Output:
         - Mat that is the inverse of A
-    
+
     Example:
         >>> A = listlist2mat([[1, .5, .2, 4],[0, 1, .3, .9],[0,0,1,.1],[0,0,0,1]])
         >>> find_triangular_matrix_inverse(A) == Mat(({0, 1, 2, 3}, {0, 1, 2, 3}), {(0, 1): -0.5, (1, 2): -0.3, (3, 2): 0.0, (0, 0): 1.0, (3, 3): 1.0, (3, 0): 0.0, (3, 1): 0.0, (2, 1): 0.0, (0, 2): -0.05000000000000002, (2, 0): 0.0, (1, 3): -0.87, (2, 3): -0.1, (2, 2): 1.0, (1, 0): 0.0, (0, 3): -3.545, (1, 1): 1.0})
         True
     '''
     pass
-
