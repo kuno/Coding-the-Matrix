@@ -82,9 +82,21 @@ def rotation(theta):
     (rotation(3*math.pi/4) * Vec({'x','y','u'},{'x':4,'y':-3,'u':1}) - Vec({'x','y','u'},{'x':-1/math.sqrt(2), 'y':7/math.sqrt(2), 'u': 1})).is_almost_zero()
     True
     '''
-    pass
+    D = {'x', 'y', 'u'}
+    f = {}
+    for r in D:
+        for c in D:
+            if (r == c == 'u'):
+                f[(r, c)] = 1
+            elif (r == c == 'x'):
+                f[(r, c)] = math.cos(math.pi - theta)
+            elif (r == c == 'y'):
+                f[(r, c)] = math.sin(math.pi - theta)
+            else:
+                f[(r, c)] = 0
+    return Mat((D, D), f)
 
-## Task 5
+# Task 5
 def rotate_about(theta, x, y):
     '''
     Input:  an angle theta (in radians) by which to rotate, and x- and y- coordinates of a point to rotate about

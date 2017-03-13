@@ -7,6 +7,8 @@ from solver import solve
 from matutil import listlist2mat, coldict2mat
 from mat import Mat
 from vec import Vec
+from independence import rank
+from The_Basis_problems import exchange, is_independent, is_superfluous
 
 
 # 1: (Problem 6.7.2) Iterative Exchange Lemma
@@ -40,43 +42,6 @@ exchange_2_S0 = [w0, w1, w2]
 exchange_2_S1 = [w0, w1, v0]
 exchange_2_S2 = [w0, v2, v0]
 exchange_2_S3 = [v0, v1, v2]
-
-
-## 19: (Problem 5.14.19) Exchange Lemma in Python
-def exchange(S, A, z):
-    '''
-    Input:
-        - S: a list of vectors, as instances of your Vec class
-        - A: a list of vectors, each of which are in S, with len(A) < len(S)
-        - z: an instance of Vec such that A+[z] is linearly independent
-    Output: a vector w in S but not in A such that Span S = Span ({z} U S - {w})
-    Example:
-        >>> S = [list2vec(v) for v in [[0,0,5,3],[2,0,1,3],[0,0,1,0],[1,2,3,4]]]
-        >>> A = [list2vec(v) for v in [[0,0,5,3],[2,0,1,3]]]
-        >>> z = list2vec([0,2,1,1])
-        >>> exchange(S, A, z) == Vec({0, 1, 2, 3},{0: 0, 1: 0, 2: 1, 3: 0})
-        True
-    '''
-    for i, w in enumerate([v for v in S if v not in A]):
-        l = S.copy()
-        l.remove(w)
-
-        veclist = [z] + l
-
-        A = coldict2mat({k:veclist[k] for k in range(len(veclist))})
-        print(A)
-
-        try:
-            b = solve(A, w)
-        except Exception:
-            return None
-
-        print(b)
-
-        if (w - A * b).is_almost_zero():
-            return w
-
-    return None
 
 # TODO: Make it with random ordered S
 # 3: (Problem 6.7.4) Morph Lemma Coding
@@ -122,23 +87,24 @@ def morph(S, B):
         T.append((b, w))
         S0.remove(w)
 
+
     return T
 
 
 # 4: (Problem 6.7.5) Row and Column Rank Practice
 # Please express each solution as a list of Vecs
 
-row_space_1 = [...]
-col_space_1 = [...]
+row_space_1 = [Vec({0, 1, 2}, {0:1, 1:2, 2:0}), Vec({0, 1, 2}, {0:0, 1:2, 2:1})]
+col_space_1 = [Vec({0, 1}, {0: 1, 1: 0}), Vec({0, 1}, {0: 0, 1: 1})]
 
-row_space_2 = [...]
-col_space_2 = [...]
+row_space_2 = [Vec({0, 1, 2, 3}, {0:1, 1:4, 2:0, 3:0}),Vec({0, 1, 2, 3}, {0:0, 1:2, 2:2, 3:0}),Vec({0, 1, 2, 3}, {0:0, 1:0, 2:1, 3:1})]
+col_space_2 = [Vec({0, 1, 2}, {0:1, 1:0, 2:0}), Vec({0, 1, 2}, {0:0, 1:2, 2:1}), Vec({0, 1, 2}, {0:0, 1:0, 2:1})]
 
-row_space_3 = [...]
-col_space_3 = [...]
+row_space_3 = [Vec({0},  {})]
+col_space_3 = [Vec({0, 1, 2}, {0:1, 1:2, 2: 3})]
 
-row_space_4 = [...]
-col_space_4 = [...]
+row_space_4 = [Vec({0, 1}, {0:1, 1:0}), Vec({0, 1}, {0:2, 1:1})]
+col_space_4 = [Vec({0, 1, 2}, {0:1, 1:2, 2:3})]
 
 
 # 5: (Problem 6.7.6) My Is Independent Procedure
@@ -168,7 +134,7 @@ def my_is_independent(L):
         >>> L == [Vec(D,{0: 1}), Vec(D,{1: 1}), Vec(D,{2: 1}), Vec(D,{0: 1, 1: 1, 2: 1}), Vec(D,{0: 1, 1: 1}), Vec(D,{1: 1, 2: 1})]
         True
     '''
-    pass
+    return rank(L) == len(L)
 
 
 # 6: (Problem 6.7.7) My Rank
@@ -187,13 +153,12 @@ def my_rank(L):
         >>> my_rank([list2vec(v) for v in [[1,1,1],[2,2,2],[3,3,3],[4,4,4],[123,432,123]]])
         2
     '''
-    pass
-
+    return rank(L)
 
 # 7: (Problem 6.7.9) Direct Sum Validity
 # Please give each answer as a boolean
 
-only_share_the_zero_vector_1 = ...
+only_share_the_zero_vector_1 = True
 only_share_the_zero_vector_2 = ...
 only_share_the_zero_vector_3 = ...
 
